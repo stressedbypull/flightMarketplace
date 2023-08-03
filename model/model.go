@@ -40,13 +40,13 @@ func (Order) TableName() string {
 
 // Flight model entity
 type Flight struct {
-	ID                uuid.UUID `gorm:"type:uuid;primaryKey;column:id" json:"id"`
+	ID                uuid.UUID `gorm:"type:uuid;primaryKey;column:id" json:"id" `
 	Origin            string    `gorm:"size:70" json:"origin"`
 	Destination       string    `gorm:"size:70" json:"destination"`
-	DepartureDateTime time.Time `gorm:"column:departure_date_time" json:"departureDateTime"`
-	ArrivalDateTime   time.Time `gorm:"column:arrival_date_time" json:"arrivalDateTime"`
+	DepartureDateTime time.Time `gorm:"column:departure_date_time" json:"departureDateTime" sql:"type:timestamp"`
+	ArrivalDateTime   time.Time `gorm:"column:arrival_date_time" json:"arrivalDateTime" sql:"type:timestamp"`
 	Price             float64   `gorm:"type:numeric" json:"price"`
-	AvailableSeats    int       `json:"availableSeats"`
+	AvailableSeats    int       `gorm:"type:numeric" json:"availableSeats"`
 	// Other flight attributes as needed
 }
 

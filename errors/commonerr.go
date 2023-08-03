@@ -1,28 +1,83 @@
 package errors
 
-import "net/http"
-
-// ErrServerError is raised when server breaks for internal reasons.
-var ErrServerError = &MarktErr{message: "ERR_INTERNAL_SERVER_ERROR", status: http.StatusInternalServerError}
-
-var ErrUnauthorized = &MarktErr{message: "User not authorized", status: http.StatusUnauthorized}
-
-// ErrMissingToken is raised when request does not contain a jwt for an API which requires authentication.
-var ErrMissingToken = &MarktErr{message: "ERR_MISSING_TOKEN", status: http.StatusUnauthorized}
-
-var ErrInvalidToken = &MarktErr{message: "ERR_INVALID_TOKEN", status: http.StatusUnauthorized}
-
-var ErrInContextRequest = &MarktErr{message: "ERR_IN_CONTEXT_REQUEST", status: http.StatusInternalServerError}
+import (
+	"fmt"
+	"net/http"
+)
 
 // ErrBadSyntax is raised when user provides a form or body with missing or invalid fields.
-var ErrBadSyntax = &MarktErr{message: "ERR_BAD_SYNTAX", status: http.StatusBadRequest}
+func ErrBadSyntax() *MarktErr {
 
-var ErrNotFound = &MarktErr{message: "ERR_NO_RECORD_FOUND_IN_DB", status: http.StatusNotFound}
+	code := "ERR_BAD_SYNTAX"
+	msg := fmt.Sprintf("%s: tried to make a request using body or form with missing or invalid fields.", code)
 
-var ErrInvalidParamErr = &MarktErr{message: "ERR_INVALID_PARAM", status: http.StatusBadRequest}
+	return &MarktErr{
+		Message: msg,
+		Status:  http.StatusBadRequest,
+		Parameters: map[string]interface{}{
+			"error_code": code,
+		},
+	}
+}
 
-// ErrOperationForbidden raised when application logic blocks an operation (no 401) for a user, for example because
-// some precondition is not satisfied.
-var ErrOperationForbidden = &MarktErr{message: "ERR_OPERATION_FORBIDDEN", status: http.StatusForbidden}
+// ErrUnauthorized is raised when user is not authorized to use the API.
+func ErrUnauthorized() *MarktErr {
 
-var ErrUsernameNotExist = &MarktErr{message: "ERR_USERNAME_NOT_EXIST", status: http.StatusBadRequest}
+	code := "USER_NOT_AUTHORIZED"
+	msg := fmt.Sprintf("%s: tried to make a request without the proper authorization.", code)
+
+	return &MarktErr{
+		Message: msg,
+		Status:  http.StatusUnauthorized,
+		Parameters: map[string]interface{}{
+			"error_code": code,
+		},
+	}
+}
+
+// ErrMalformedBody is raised when the call's body cannot be decoded.
+func ErrMalformedBody() *MarktErr {
+
+	code := "ERR_MALFORMED_BODY"
+	msg := fmt.Sprintf("%s: tried to make a request using a json body that could not be decoded.", code)
+
+	return &MarktErr{
+		Message: msg,
+		Status:  http.StatusUnprocessableEntity,
+		Parameters: map[string]interface{}{
+			"error_code": code,
+		},
+	}
+}
+
+// ErrServerError is raised when server breaks for internal reasons.
+func ErrServerError(message string) *MarktErr {
+
+	code := "ERR_INTERNAL_SERVER_ERROR"
+	msg := fmt.Sprintf("%s: an error was thrown during internal server processes. Error message: '%s'.", code, message)
+
+	return &MarktErr{
+		Message: msg,
+		Status:  http.StatusInternalServerError,
+		Parameters: map[string]interface{}{
+			"error_code": code,
+		},
+	}
+}
+
+// ErrServerError is raised when server breaks for internal reasons.
+func ErrBadRequest(message string) *MarktErr {
+
+	code := "ERR_BAD_REQUEST"
+	msg := message
+	if msg == "" {
+		msg = fmt.Sprintf("%s: an error was thrown during bad request. Error message: '%s'.", code, message)
+	}
+	return &MarktErr{
+		Message: msg,
+		Status:  http.StatusInternalServerError,
+		Parameters: map[string]interface{}{
+			"error_code": code,
+		},
+	}
+}

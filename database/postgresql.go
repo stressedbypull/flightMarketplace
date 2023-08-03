@@ -12,6 +12,11 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
+type PostgresInterface interface {
+	FlightDatabaseInterface
+}
+
+// PostgresClient is a wrapper around gorm.DB
 type PostgresClient struct {
 	DB *gorm.DB
 }

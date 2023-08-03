@@ -1,10 +1,16 @@
 package main
 
 import (
-	"fmt"
 	"log"
+	"net/http"
 	"tui/flightmarketplace/config"
+	"tui/flightmarketplace/controller"
 	"tui/flightmarketplace/database"
+	"tui/flightmarketplace/dataservice"
+	"tui/flightmarketplace/router"
+
+	"github.com/gorilla/mux"
+	"github.com/rs/cors"
 )
 
 func main() {
@@ -30,8 +36,18 @@ func main() {
 	//}
 
 	//create a new router
-	//router := router.NewRouter()
+	routerMux := mux.NewRouter()
+	//create a new dataservice
+	// Create the dataservice
+	ds := &dataservice.DataGatewayService{
+		Db: postgres,
+	}
+	// Create the controller
+	c := &controller.Controller{Ds: ds}
+	router.SetupRouter(routerMux, c)
+
+	println("Start flight-marketplace: server on port ", config.Config.Server.Port)
+
 	//Listen and serve
-	//log.Fatal(http.ListenAndServe(":"+config.Config.Server.Port, router))
-	fmt.Printf("Hola mundo")
+	log.Fatal(http.ListenAndServe(":"+config.Config.Server.Port, cors.AllowAll().Handler(routerMux)))
 }

@@ -34,14 +34,6 @@ func setupMockPostgres(t *testing.T) {
 	client = psqlTestClient
 }
 
-// teardown closes the mock database connection after each test
-/* func teardown() {
-	err := gormDB.Close()
-	if err != nil {
-		panic("error closing database connection: " + err.Error())
-	}
-} */
-
 func TestPostgresClient_ConfigureTables(t *testing.T) {
 	setupMockPostgres(t)
 

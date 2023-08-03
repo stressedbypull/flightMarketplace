@@ -10,6 +10,6 @@
         "Dialect" : "postgres"
     },
     "Server": {
-        "Port": "8080"
+        "Port": "8085"
     }
 }
