@@ -5,17 +5,15 @@ import (
 	"net/http"
 	"tui/flightmarketplace/controller"
 
-	httpSwagger "github.com/swaggo/http-swagger"
-
 	"github.com/gorilla/mux"
+	httpSwagger "github.com/swaggo/http-swagger"
 )
 
 // SetupRouter setup the routing of roomenta
 func SetupRouter(router *mux.Router, ctrl controller.ControllerInterface) {
 
 	setupPingRouter(router)
-
-	router.Use(loggingMiddleware, recoveryPanicMdlw)
+	router.Use(recoveryPanicMdlw)
 
 	setupPrivateRouter(router.PathPrefix("").Subrouter(), ctrl)
 	setupPublicRouter(router.PathPrefix("").Subrouter(), ctrl)
@@ -43,6 +41,7 @@ func setupPrivateRouter(router *mux.Router, ctrl controller.ControllerInterface)
 	//setupOrderRouter(router.PathPrefix("/order").Subrouter(), ctrl)
 	//setupUserRouter(router.PathPrefix("/user").Subrouter(), ctrl)
 }
+
 func setupSwaggoDocumentation(router *mux.Router) {
 	// Necessary for swaggo (documentation)
 	router.PathPrefix("/docs/").Handler(httpSwagger.WrapHandler)

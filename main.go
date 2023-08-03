@@ -10,7 +10,6 @@ import (
 	"tui/flightmarketplace/router"
 
 	"github.com/gorilla/mux"
-	"github.com/rs/cors"
 )
 
 func main() {
@@ -37,7 +36,6 @@ func main() {
 
 	//create a new router
 	routerMux := mux.NewRouter()
-	//create a new dataservice
 	// Create the dataservice
 	ds := &dataservice.DataGatewayService{
 		Db: postgres,
@@ -49,5 +47,5 @@ func main() {
 	println("Start flight-marketplace: server on port ", config.Config.Server.Port)
 
 	//Listen and serve
-	log.Fatal(http.ListenAndServe(":"+config.Config.Server.Port, cors.AllowAll().Handler(routerMux)))
+	log.Fatal(http.ListenAndServe(":"+config.Config.Server.Port, routerMux))
 }

@@ -59,7 +59,6 @@ func (ds *DataGatewayService) CreateFlight(flightDto dto.FlightDto) model.Flight
 	// Now, create the flight in the database using your flight database implementation
 	createdFlight, err := ds.Db.CreateFlight(&flight)
 	if err != nil {
-
 		err_handler.ThrowError(err_handler.ErrBadSyntax())
 	}
 
