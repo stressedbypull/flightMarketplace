@@ -57,8 +57,8 @@ func (ds *DataGatewayService) CreateFlight(flightDto dto.FlightDto) model.Flight
 	}
 
 	// Now, create the flight in the database using your flight database implementation
-	createdFlight, err := ds.Db.CreateFlight(&flight)
-	if err != nil {
+	createdFlight, errNew := ds.Db.CreateFlight(&flight)
+	if errNew != nil {
 		err_handler.ThrowError(err_handler.ErrBadSyntax())
 	}
 
@@ -111,8 +111,8 @@ func (ds *DataGatewayService) ModifyFlight(flightID string, flightDto dto.Flight
 	}
 
 	// Now, modify the flight in the database using your flight database implementation
-	id, err := ds.Db.ModifyFlight(&flight)
-	if err != nil {
+	id, errNew := ds.Db.ModifyFlight(&flight)
+	if errNew != nil {
 		newErr := err_handler.ErrServerError(err.Error())
 		err_handler.ThrowError(newErr)
 	}
@@ -129,8 +129,8 @@ func (ds *DataGatewayService) DeleteFlight(flightID string) uuid.UUID {
 		return uuid.Nil
 	}
 	// Now, delete the flight from the database using your flight database implementation
-	id, err := ds.Db.DeleteFlight(uuidd)
-	if err != nil {
+	id, errNew := ds.Db.DeleteFlight(uuidd)
+	if errNew != nil {
 		err_handler.ThrowError(err_handler.ErrBadRequest("Invalid flight ID"))
 		return uuid.Nil
 	}
@@ -147,8 +147,8 @@ func (ds *DataGatewayService) GetFlightById(flightID string) *model.Flight {
 		return nil
 	}
 	// Get the flight from the database using flightID
-	flight, err := ds.Db.GetFlightById(uuid)
-	if err != nil {
+	flight, errNew := ds.Db.GetFlightById(uuid)
+	if errNew != nil {
 		err_handler.ThrowError(err_handler.ErrBadRequest("Invalid flight ID"))
 		return nil
 	}
@@ -158,9 +158,9 @@ func (ds *DataGatewayService) GetFlightById(flightID string) *model.Flight {
 
 func (ds *DataGatewayService) GetAllFlights() []model.Flight {
 	// Get all flights from the database using your flight database implementation
-	flights, err := ds.Db.GetAllFlights()
-	if err != nil {
-		err_handler.ThrowError(err)
+	flights, errNew := ds.Db.GetAllFlights()
+	if errNew != nil {
+		err_handler.ThrowError(errNew)
 	}
 
 	return flights
@@ -168,9 +168,9 @@ func (ds *DataGatewayService) GetAllFlights() []model.Flight {
 
 func (ds *DataGatewayService) GetFlightCountsByDurationBuckets() map[string]int {
 	// Call the GetFlightCountsByDurationBuckets function in the database
-	flightCounts, err := ds.Db.GetFlightCountsByDurationBuckets()
-	if err != nil {
-		err_handler.ThrowError(err)
+	flightCounts, errNew := ds.Db.GetFlightCountsByDurationBuckets()
+	if errNew != nil {
+		err_handler.ThrowError(errNew)
 	}
 
 	return flightCounts

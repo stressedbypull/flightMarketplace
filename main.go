@@ -10,6 +10,7 @@ import (
 	"tui/flightmarketplace/router"
 
 	"github.com/gorilla/mux"
+	"github.com/rs/cors"
 )
 
 func main() {
@@ -47,5 +48,5 @@ func main() {
 	println("Start flight-marketplace: server on port ", config.Config.Server.Port)
 
 	//Listen and serve
-	log.Fatal(http.ListenAndServe(":"+config.Config.Server.Port, routerMux))
+	log.Fatal(http.ListenAndServe(":"+config.Config.Server.Port, cors.AllowAll().Handler(routerMux)))
 }

@@ -37,12 +37,12 @@ func setupPublicRouter(router *mux.Router, ctrl controller.ControllerInterface) 
 func setupPrivateRouter(router *mux.Router, ctrl controller.ControllerInterface) {
 	//router.Use(authenticationMiddleware)
 
-	setupFlightRouter(router.PathPrefix("/flight").Subrouter(), ctrl)
+	setupFlightRouter(router.PathPrefix("/flights").Subrouter(), ctrl)
 	//setupOrderRouter(router.PathPrefix("/order").Subrouter(), ctrl)
 	//setupUserRouter(router.PathPrefix("/user").Subrouter(), ctrl)
 }
 
 func setupSwaggoDocumentation(router *mux.Router) {
 	// Necessary for swaggo (documentation)
-	router.PathPrefix("/docs/").Handler(httpSwagger.WrapHandler)
+	router.PathPrefix("/docs/").Handler(httpSwagger.Handler())
 }
